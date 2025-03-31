@@ -66,7 +66,6 @@ func worker(ctx context.Context, client *redis.Client, queueName string, workerI
 
 		fmt.Println(jobJSON)
 
-		// Parse the job
 		var job JobPayload
 		err = json.Unmarshal([]byte(jobJSON), &job)
 		if err != nil {
@@ -74,13 +73,11 @@ func worker(ctx context.Context, client *redis.Client, queueName string, workerI
 			continue
 		}
 
-		// Log the job details
 		fmt.Printf("Worker %d processing job: %+v\n", workerID, job)
 
-		// process the job
 		processJob(workerID, job)
 
-		// are available: Process job → Wait 500ms → Get next job
+		// Process job → Wait 1s → Get next job
 		time.Sleep(time.Second)
 	}
 }
