@@ -12,10 +12,11 @@ type Job struct {
 }
 
 type Config struct {
-	QueueName    string `mapstructure:"QUEUE_NAME"`
-	WorkersCount int    `mapstructure:"WORKERS_COUNT"`
-	RedisHost    string `mapstructure:"REDIS_HOST"`
-	RedisPort    string `mapstructure:"REDIS_PORT"`
-	RedisPass    string `mapstructure:"REDIS_PASS"`
-	RedisDB      int    `mapstructure:"REDIS_DB"`
+	QueueName    string
+	WorkersCount int
+	RedisHost    string
+	RedisPort    string
+	RedisPass    string
+	RedisDB      int
+	BufferSize   int
 }

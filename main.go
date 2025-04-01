@@ -36,7 +36,7 @@ func init() {
 
 func main() {
 	// This channel will be used to send jobs to the workers
-	jobChannel := make(chan *Job)
+	jobChannel := make(chan *Job, config.BufferSize)
 
 	// Start workers
 	numWorkers := config.WorkersCount

@@ -21,6 +21,7 @@ func loadConfig() (config Config, err error) {
 	config.RedisDB, _ = strconv.Atoi(os.Getenv("REDIS_DB"))
 	config.QueueName = os.Getenv("QUEUE_NAME")
 	config.WorkersCount, _ = strconv.Atoi(os.Getenv("WORKERS_COUNT"))
+	config.BufferSize, _ = strconv.Atoi(os.Getenv("BUFFER_SIZE"))
 
 	return config, nil
 }
