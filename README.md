@@ -22,13 +22,30 @@ $payload = [
 $queueManager->pushRaw(json_encode($payload, JSON_THROW_ON_ERROR), 'my_queue_name');
 ```
 
-## How the Go Consumer Works
+## Configuration
 
-The Go consumer:
+The application is configured via environment variables in a `.env` file:
 
-1. Connects to your Redis instance
-2. Uses multiple workers (50, check the code) to process jobs concurrently
-3. Processes JSON payloads with the structure defined in the `JobPayload` struct
+```dotenv
+QUEUE_NAME=erp_database_queues:my_queue_name
+WORKERS_COUNT=5
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+```
+
+Default values are set if no `.env` file is found.
+
+## How It Works
+
+The consumer:
+
+1. Connects to the configured Redis instance
+2. Starts multiple worker goroutines (configurable via `WORKERS_COUNT`)
+3. Uses a single reader goroutine to pull jobs from Redis using `BLPOP`
+4. Distributes jobs to workers through a channel
+5. Processes jobs in parallel
 
 ## Benefits
 
