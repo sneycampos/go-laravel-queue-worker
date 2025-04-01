@@ -1,33 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
+	"os"
+	"strconv"
 )
 
 // loads the configuration from the .env file
 func loadConfig() (config Config, err error) {
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
-	viper.AddConfigPath(".")
-
-	viper.SetDefault("QUEUE_NAME", "job-queue")
-	viper.SetDefault("WORKERS_COUNT", 1)
-	viper.SetDefault("REDIS_HOST", "localhost")
-	viper.SetDefault("REDIS_PORT", "6379")
-	viper.SetDefault("REDIS_PASS", "")
-	viper.SetDefault("REDIS_DB", 0)
-
-	err = viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("fatal error config file: %w", err))
-	}
-
-	err = viper.Unmarshal(&config)
+	err = godotenv.Load(".env")
 
 	if err != nil {
-		panic(fmt.Errorf("unable to decode the .env file: %w", err))
+		return config, err
 	}
+
+	// Load the configuration from the environment variables
+	config.RedisHost = os.Getenv("REDIS_HOST")
+	config.RedisPort = os.Getenv("REDIS_PORT")
+	config.RedisPass = os.Getenv("REDIS_PASS")
+	config.RedisDB, _ = strconv.Atoi(os.Getenv("REDIS_DB"))
+	config.QueueName = os.Getenv("QUEUE_NAME")
+	config.WorkersCount, _ = strconv.Atoi(os.Getenv("WORKERS_COUNT"))
 
 	return config, nil
 }
