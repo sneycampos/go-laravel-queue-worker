@@ -19,6 +19,8 @@ $payload = [
     'address' => fake()->address(),
 ];
 
+// Using pushRaw so the job is not serialized but sent as raw JSON
+// So in the Go consumer we can decode it directly without needing to unserialize it
 $queueManager->pushRaw(json_encode($payload, JSON_THROW_ON_ERROR), 'my_queue_name');
 ```
 
